@@ -30,11 +30,13 @@
     <script src="{{ asset('assets/customer/lib/lightbox/js/lightbox.min.js') }}"></script>
     <script src="{{ asset('assets/customer/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-
     <script>
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
+
+    <!-- Template Javascript -->
+        <script src="{{ asset('assets/customer/js/main.js') }}"></script>
+
+    @yield('script')
     </body>
 </html>

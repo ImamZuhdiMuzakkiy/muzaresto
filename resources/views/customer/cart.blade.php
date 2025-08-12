@@ -34,12 +34,10 @@
                                     $itemTotal = $item['price'] * $item['qty'];
                                     $subtotal += $itemTotal;
                                 @endphp
-                                
-                            @endforeach
                             <tr>
                                 <th scope="row">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ asset('img_item_upload/' . $item->image) }}" class="img-fluid w-100 rounded-top" alt="" onerror="this.onerror=null; this.src='{{ $item->image }}';">
+                                        <img src="{{ asset('img_item_upload/' . $item['image']) }}" class="rounded-circle" style="width: 70px; height: 70px; object-fit: cover;" alt="" onerror="this.onerror=null; this.src='{{ $item['image'] }}';">
                                     </div>
                                 </th>
                                 <td>
@@ -72,6 +70,7 @@
                                     </button>
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

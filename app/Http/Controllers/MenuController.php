@@ -45,7 +45,7 @@ class MenuController extends Controller
                 'id' => $menu->id,
                 'name' => $menu->name,
                 'price' => $menu->price,
-                'img' => $menu->img,
+                'image' => $menu->image,
                 'qty' => 1
             ];
         }
