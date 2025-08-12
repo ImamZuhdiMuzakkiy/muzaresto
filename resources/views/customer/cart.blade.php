@@ -70,7 +70,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4">{{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</p>
+                                    <p class="mb-0 mt-4">Rp{{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</p>
                                 </td>
                                 <td>
                                     <button class="btn btn-md rounded-circle bg-light border mt-4" onClick="if(confirm('Apakah anda yakin ingin menghapus item ini?')) { removeItemFromCart({{ $item['id'] }}) }">

@@ -35,7 +35,7 @@
     </script>
 
     <!-- Template Javascript -->
-        <script src="{{ asset('assets/customer/js/main.js') }}"></script>
+    <script src="{{ asset('assets/customer/js/main.js') }}"></script>
 
     @yield('script')
     </body>
