@@ -49,13 +49,13 @@
                                 <td>
                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" onClick="updateQuantity({{ $item['id'] }}, -1)">
                                             <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="text" class="form-control form-control-sm text-center border-0" value={{ $item['qty'] }} readonly>
+                                        <input id="qty-{{ $item['id'] }}" type="text" class="form-control form-control-sm text-center border-0 bg-transparent" value={{ $item['qty'] }} readonly>
                                         <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border" onClick="updateQuantity({{ $item['id'] }}, 1)">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
@@ -65,7 +65,7 @@
                                     <p class="mb-0 mt-4">{{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</p>
                                 </td>
                                 <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4" >
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4" onClick="if(confirm('Apakah anda yakin ingin menghapus item ini?')) { removeItemFromCart({{ $item['id'] }}) }">
                                         <i class="fa fa-times text-danger"></i>
                                     </button>
                                 </td>
@@ -78,6 +78,9 @@
                     $tax = $subtotal * 0.1; // 10% tax
                     $total = $subtotal + $tax;
                 @endphp
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('cart.clear') }}" class="btn btn-danger" onClick="return confirm('Apakah anda yakin ingin menghapus semua item ini?')">Kosongkan Keranjang</a>
+                </div>
                 <div class="row g-4 justify-content-end mt-1">
                     <div class="col-8"></div>
                     <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
@@ -112,4 +115,70 @@
             </div>
         </div> 
         <!-- Cart Page End -->
+@endsection
+
+@section('script')
+    <script>
+        function updateQuantity(itemID, change){
+            var qtyInput = document.getElementById('qty-' + itemID);
+            var currentQty = parseInt(qtyInput.value);
+            var newQty = currentQty + change;
+
+            if(newQty <= 0) {
+                if(confirm('Apakah anda yakin ingin menghapus item ini?')) {
+                    removeItemFromCart(itemID);
+                } 
+                return;
+            }
+
+            fetch("{{ route('cart.update') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    id: itemID,
+                    qty: newQty
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    qtyInput.value = newQty;
+                    location.reload();
+                } else {
+                    alert('Gagal memperbarui jumlah item');
+                }
+            })
+            .catch(error => {
+                alert('Terjadi kesalahan');
+            });
+        }
+
+        function removeItemFromCart(itemID) {
+            fetch("{{ route('cart.remove') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    id: itemID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error', error);
+                alert('Terjadi kesalahan');
+            });
+        }
+    </script>
 @endsection
