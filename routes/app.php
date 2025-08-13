@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('menu');
@@ -36,9 +37,7 @@ Route::middleware('role:admin|cashier')->group(function() {
 });
 
 Route::middleware('role:admin|cashier|chef')->group(function() {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('orders', OrderController::class);
     Route::resource('items', ItemController::class);
     Route::post('orders/{order}', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');

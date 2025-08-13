@@ -42,7 +42,7 @@
                             <th>Metode Pembayaran</th>
                             <th>Catatan</th>
                             <th>Dibuat Pada</th>
-                            <th>Aksin</th>
+                            <th colspan="2">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,6 +72,8 @@
                                         <i class="bi bi-eye"></i> Detail
                                     </a>
                                     </span>
+                                </td>
+                                <td>
                                     @if (Auth::user()->role->role_name == 'admin' || Auth::user()->role->role_name == 'cashier')
                                         @if ($order->status == 'pending' && $order->payment_method == 'tunai')
                                             <form action="{{ route('orders.updateStatus', $order->id) }}" method="POST">
