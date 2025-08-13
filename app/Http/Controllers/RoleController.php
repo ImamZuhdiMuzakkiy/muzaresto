@@ -21,7 +21,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.role.create');
     }
 
     /**
@@ -29,7 +29,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'role_name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        Role::create($request->all());
+
+        return redirect()->route('roles.index')->with('success', 'Role sukses dibuat');
     }
 
     /**
@@ -45,7 +52,8 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+        return view('admin.role.edit', compact('role'));
     }
 
     /**
@@ -53,7 +61,14 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'role_name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+        ]);
+        $role = Role::findOrFail($id);
+        $role->update($request->all());
+
+        return redirect()->route('roles.index')->with('success', 'Role sukses diperbarui');
     }
 
     /**
@@ -61,6 +76,9 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+        $role->delete();
+
+        return redirect()->route('roles.index')->with('success', 'Role sukses dihapus');
     }
 }
